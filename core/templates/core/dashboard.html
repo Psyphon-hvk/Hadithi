@@ -88,28 +88,24 @@
                 <a href="{% url 'resources:list' %}" class="text-xs font-medium text-hadithi-600 hover:text-hadithi-800 whitespace-nowrap">Browse all</a>
             </div>
 
-            {% if recent_resources %}
-                {% with featured=recent_resources.0 %}
-                <a href="{{ featured.get_absolute_url }}" class="group block mx-4 sm:mx-5 mb-4 relative overflow-hidden rounded-xl bg-hadithi-800 aspect-[16/9] sm:aspect-[16/7]">
-                    {% if featured.cover_image %}
-                        <img src="{{ featured.cover_image.url }}" alt="" loading="lazy"
-                             class="absolute inset-0 h-full w-full object-cover opacity-70 transition-transform duration-300 group-hover:scale-105">
-                    {% else %}
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <svg class="h-10 w-10 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        </div>
-                    {% endif %}
-                    <div class="absolute inset-0 bg-gradient-to-t from-hadithi-900/90 via-hadithi-900/30 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4">
-                        <span class="inline-block text-[10px] uppercase tracking-wider font-semibold text-orange-300 mb-1">Continue learning</span>
-                        <p class="text-white text-sm sm:text-base font-semibold leading-snug line-clamp-2">{{ featured.title }}</p>
-                    </div>
-                </a>
-                {% endwith %}
+            {# Carousel always shows here — it is never replaced by a resource thumbnail #}
+            <div class="mx-4 sm:mx-5 mb-4 rounded-xl overflow-hidden relative aspect-[16/9] sm:aspect-[16/7] bg-hadithi-800">
+                <div class="hadithi-carousel absolute inset-0">
+                    <img src="{% static 'core/img/learning-hub-carousel-1.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
+                    <img src="{% static 'core/img/learning-hub-carousel-2.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
+                    <img src="{% static 'core/img/learning-hub-carousel-3.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
+                    <img src="{% static 'core/img/learning-hub-carousel-4.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-hadithi-900/80 via-hadithi-900/20 to-transparent pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 pointer-events-none">
+                    <p class="text-sm text-white/90 px-1"></p>
+                    <a href="{% url 'resources:list' %}" class="text-xs font-medium text-orange-200 hover:underline mt-1 inline-block pointer-events-auto"></a>
+                </div>
+            </div>
 
-                {% if recent_resources|length > 1 %}
+            {% if recent_resources %}
                 <div class="flex flex-col gap-2 px-4 sm:px-5 pb-4 sm:pb-5">
-                    {% for r in recent_resources|slice:"1:" %}
+                    {% for r in recent_resources %}
                         <a href="{{ r.get_absolute_url }}"
                            class="group flex items-center gap-3 rounded-xl border border-transparent bg-hadithi-50/60 hover:bg-hadithi-50 hover:border-hadithi-100 px-2.5 py-2 transition-colors">
                             <span class="flex-shrink-0 h-10 w-10 rounded-lg overflow-hidden bg-white text-hadithi-600 flex items-center justify-center">
@@ -128,21 +124,6 @@
                             <svg class="h-4 w-4 flex-shrink-0 text-hadithi-300 group-hover:text-hadithi-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                         </a>
                     {% endfor %}
-                </div>
-                {% endif %}
-            {% else %}
-                <div class="mx-4 sm:mx-5 mb-4 sm:mb-5 rounded-xl overflow-hidden relative aspect-[16/9] sm:aspect-[16/7] bg-hadithi-800">
-                    <div class="hadithi-carousel absolute inset-0">
-                        <img src="{% static 'core/img/learning-hub-carousel-1.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
-                        <img src="{% static 'core/img/learning-hub-carousel-2.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
-                        <img src="{% static 'core/img/learning-hub-carousel-3.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
-                        <img src="{% static 'core/img/learning-hub-carousel-4.jpg' %}" alt="" class="hadithi-carousel-slide absolute inset-0 h-full w-full object-contain">
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-hadithi-900/80 via-hadithi-900/20 to-transparent pointer-events-none"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 pointer-events-none">
-                        <p class="text-sm text-white/90 px-1"></p>
-                        <a href="{% url 'resources:list' %}" class="text-xs font-medium text-orange-200 hover:underline mt-1 inline-block pointer-events-auto"></a>
-                    </div>
                 </div>
             {% endif %}
         </div>
