@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Welcome | HADITHI{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700&display=swap');
+
+    /* 1. TYPOGRAPHY & COLOR VARIABLES */
+    :root {
+        --color-teal: #2E8B8B;
+        --color-teal-dark: #267a7a;
+        --color-cream-bg: #FAF7F0;
+        --color-text-dark: #1F2937;
+        --color-text-gray: #6B7280;
+
+        /* Splash-specific gradient tones */
+        --color-splash-green-deep: #2F9E68;
+        --color-splash-green-mid: #7BCE9C;
+        --color-splash-green-light: #C8ECD4;
+    }
+
+    .hadithi-splash-container * { box-sizing: border-box; }
+
+    /* Neutralize base.html's body/container margins, padding and nav
+       so this splash can sit flush and true full-bleed regardless of
+       whatever chrome the rest of the site wraps content in. */
+    html, body { height: 100%; margin: 0 !important; padding: 0 !important; }
+    body > header, body > nav, body > .navbar { display: none !important; }
+
+    /* 2. FULL-SCREEN SPLASH — pinned to the viewport, edge to edge, one
+       screen, no scroll, no gap above/below/around it */
+    .hadithi-splash-container {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        color: var(--color-text-dark);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: linear-gradient(
+            180deg,
+            var(--color-splash-green-deep) 0%,
+            var(--color-splash-green-mid) 22%,
+            var(--color-splash-green-light) 42%,
+            var(--color-cream-bg) 62%,
+            var(--color-cream-bg) 100%
+        );
+    }
+
+    .hadithi-splash-container h1 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+    }
+
+    /* 3. CONTENT COLUMN — flex spacers instead of vh math, so it holds up
+       when mobile browser chrome (address bar) resizes the viewport */
+    .splash-content {
+        flex: 1;
+        width: 100%;
+        max-width: 440px;
+        margin: 0 auto;
+        padding: 1.5rem 1.75rem calc(2rem + env(safe-area-inset-bottom));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-height: 0; /* allow children to shrink instead of overflowing */
+    }
+
+    .splash-top-spacer {
+        flex: 0.4 1 auto;
+        min-height: 0.25rem;
+    }
+
+    .hero-illustration {
+        width: 78%;
+        max-width: 380px;
+        flex: 1.4 1 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.75rem;
+        animation: illustrationBreathing 3.5s ease-in-out infinite alternate,
+                   fadeIn 0.8s ease-out 0.15s forwards;
+        opacity: 0;
+    }
+    .hero-illustration img {
+        width: 100%;
+        max-height: 38vh;
+        height: auto;
+        display: block;
+        object-fit: contain;
+    }
+
+    .hadithi-headline {
+        font-size: 1.85rem;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        color: var(--color-text-dark);
+        margin-bottom: 0.75rem;
+        animation: fadeSlideUp 0.7s ease-out 0.3s forwards;
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    .hadithi-subtitle {
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        color: var(--color-text-gray);
+        max-width: 300px;
+        margin-bottom: 1.75rem;
+        animation: fadeSlideUp 0.7s ease-out 0.45s forwards;
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    .splash-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.85rem;
+        flex: 0 0 auto;
+        animation: fadeIn 0.7s ease-out 0.6s forwards;
+        opacity: 0;
+    }
+
+    .btn-hadithi-primary {
+        width: 100%;
+        background-color: #FFFFFF;
+        color: var(--color-text-dark);
+        padding: 0.9rem 2rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(31, 41, 55, 0.12);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-hadithi-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(31, 41, 55, 0.16);
+    }
+    .btn-hadithi-primary:active { transform: translateY(0); }
+
+    .btn-hadithi-login {
+        background: none;
+        border: none;
+        color: var(--color-text-dark);
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        padding: 0.4rem;
+    }
+    .btn-hadithi-login:hover { color: var(--color-teal-dark); }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes fadeSlideUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes illustrationBreathing {
+        from { transform: translateY(0) scale(1); }
+        to { transform: translateY(-4px) scale(1.015); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-illustration, .hadithi-headline, .hadithi-subtitle, .splash-actions {
+            animation: none !important; opacity: 1 !important; transform: none !important;
+        }
+    }
+
+    /* 4. MOBILE REFINEMENTS — scale everything down on shorter/narrower screens
+       so the whole splash still fits one viewport without scrolling */
+    @media (max-width: 640px) {
+        .splash-content { padding: 1.25rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom)); }
+        .hero-illustration { width: 70%; max-width: 300px; margin-bottom: 1.25rem; }
+        .hero-illustration img { max-height: 32vh; }
+        .hadithi-headline { font-size: 1.55rem; }
+        .hadithi-subtitle { font-size: 0.88rem; margin-bottom: 1.5rem; }
+    }
+
+    @media (max-width: 400px) {
+        .hero-illustration { width: 66%; max-width: 250px; margin-bottom: 1rem; }
+        .hero-illustration img { max-height: 28vh; }
+        .hadithi-headline { font-size: 1.4rem; }
+        .btn-hadithi-primary { padding: 0.8rem 1.5rem; }
+    }
+
+    /* Short / landscape phones: shrink the illustration first, keep text legible */
+    @media (max-height: 650px) {
+        .hero-illustration { width: 50%; max-width: 180px; margin-bottom: 0.6rem; }
+        .hero-illustration img { max-height: 22vh; }
+        .splash-top-spacer { min-height: 0; }
+    }
+
+    @media (max-height: 500px) {
+        .hero-illustration { display: none; }
+        .hadithi-headline { font-size: 1.25rem; margin-bottom: 0.4rem; }
+        .hadithi-subtitle { margin-bottom: 1rem; }
+    }
+</style>
+
+<div class="hadithi-splash-container">
+    <div class="splash-content">
+
+        <div class="splash-top-spacer"></div>
+
+        <div class="hero-illustration">
+            <img src="{% static 'images/logo.png' %}" alt="HADITHI logo">
+        </div>
+
+        <h1 class="hadithi-headline">Welcome to HADITHI</h1>
+        <p class="hadithi-subtitle">Harnessing Actionable Dialogues, Insights and Tailored Health Interventions.</p>
+
+        {% if not user.is_authenticated %}
+        <div class="splash-actions">
+            <a href="{% url 'accounts:register' %}" class="btn-hadithi-primary">Create account</a>
+            <a href="{% url 'accounts:login' %}" class="btn-hadithi-login">Login</a>
+        </div>
+        {% else %}
+        <div class="splash-actions">
+            <a href="{% url 'core:dashboard' %}" class="btn-hadithi-primary">Go to Dashboard</a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

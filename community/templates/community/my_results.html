@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}My Results | HADITHI{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-hadithi-800 mb-6">My Assessment Results</h1>
+<table class="w-full bg-white rounded-xl border shadow-sm text-sm">
+    <thead class="bg-gray-50 text-left">
+        <tr><th class="p-3">Assessment</th><th class="p-3">Score</th><th class="p-3">Date</th></tr>
+    </thead>
+    <tbody>
+        {% for r in results %}
+        <tr class="border-t"><td class="p-3">{{ r.assessment.name }}</td><td class="p-3">{{ r.score }}</td><td class="p-3">{{ r.taken_at|date:"M d, Y" }}</td></tr>
+        {% empty %}
+        <tr><td colspan="3" class="p-3 text-gray-400">No results yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

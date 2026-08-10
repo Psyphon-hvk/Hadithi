@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Mindfulness | HADITHI{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-hadithi-800 mb-6">Mindfulness Sessions</h1>
+<div class="grid md:grid-cols-3 gap-5">
+    {% for s in sessions %}
+    <div class="bg-white rounded-xl border shadow-sm p-5">
+        <h3 class="font-semibold mb-2">{{ s.title }}</h3>
+        <p class="text-sm text-gray-600 mb-3">{{ s.description }}</p>
+        <p class="text-xs text-gray-500 mb-3">{{ s.duration_minutes }} min</p>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'wellness:mindfulness_complete' s.pk %}">
+            {% csrf_token %}
+            <button class="text-hadithi-600 text-sm hover:underline">Mark as completed</button>
+        </form>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p class="text-gray-400">No sessions available yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

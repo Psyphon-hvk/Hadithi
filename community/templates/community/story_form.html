@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Share a Story | HADITHI{% endblock %}
+{% block content %}
+<div class="max-w-xl mx-auto bg-white rounded-xl border shadow-sm p-8">
+    <h1 class="text-xl font-bold text-hadithi-800 mb-6">Share your HADITHI story</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            <label class="block text-sm font-medium mb-1">Title</label>
+            <input type="text" name="title" required class="w-full border rounded-lg px-3 py-2">
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-1">Your story</label>
+            <textarea name="body" rows="8" required class="w-full border rounded-lg px-3 py-2"></textarea>
+        </div>
+        <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox" name="is_anonymous"> Post anonymously
+        </label>
+        <button class="bg-hadithi-600 text-white px-4 py-2 rounded-lg text-sm">Publish story</button>
+    </form>
+</div>
+{% endblock %}

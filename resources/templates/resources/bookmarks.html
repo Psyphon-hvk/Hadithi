@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}My Bookmarks | HADITHI{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-hadithi-800 mb-6">My Bookmarks</h1>
+<div class="grid md:grid-cols-3 gap-5">
+    {% for b in bookmarks %}
+    <a href="{{ b.resource.get_absolute_url }}" class="block bg-white rounded-xl border shadow-sm p-5 hover:shadow-md">
+        <h3 class="font-semibold">{{ b.resource.title }}</h3>
+    </a>
+    {% empty %}
+    <p class="text-gray-400">No bookmarks yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

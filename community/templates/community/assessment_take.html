@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ assessment.name }} | HADITHI{% endblock %}
+{% block content %}
+<div class="max-w-xl mx-auto bg-white rounded-xl border shadow-sm p-8">
+    <h1 class="text-xl font-bold text-hadithi-800 mb-2">{{ assessment.name }}</h1>
+    <p class="text-sm text-gray-600 mb-6">{{ assessment.description }}</p>
+    <form method="post" class="space-y-5">
+        {% csrf_token %}
+        {% for q in questions %}
+        <div>
+            <label class="block text-sm font-medium mb-1">{{ forloop.counter }}. {{ q.text }}</label>
+            <select name="q_{{ q.id }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+                <option value="0">Not at all (0)</option>
+                <option value="1">Several days (1)</option>
+                <option value="2">More than half the days (2)</option>
+                <option value="3">Nearly every day (3)</option>
+            </select>
+        </div>
+        {% endfor %}
+        <button class="bg-hadithi-600 text-white px-4 py-2 rounded-lg text-sm">Submit</button>
+    </form>
+</div>
+{% endblock %}

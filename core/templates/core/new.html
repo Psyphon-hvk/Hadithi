@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hadithi Splash Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* 1. TYPOGRAPHY & COLOR VARIABLES */
+    :root {
+        /* Color Palette from Concept */
+        --color-teal: #2E8B8B;
+        --color-teal-dark: #267a7a;
+        --color-cream-bg: #FAF7F0;
+        --color-text-dark: #1F2937;
+        --color-text-gray: #6B7280;
+
+        /* Secondary/Accent colors used in illustration */
+        --color-indigo: #6C63FF;
+        --color-orange: #F4A261;
+        --color-blue: #3B82F6;
+
+        /* Dot-step indicator */
+        --dot-empty: #E4DED0;
+    }
+
+    /* Set default fonts */
+    body {
+        font-family: 'Inter', sans-serif; /* Default body font */
+        background-color: var(--color-cream-bg);
+        color: var(--color-text-dark);
+    }
+
+    /* Poppins for bold headings */
+    h1, h2, h3 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+    }
+
+    /* 2. BACKGROUND GRADIENT & PATTERNS */
+    .hadithi-splash-container {
+        min-height: 100vh;
+        width: 100%;
+        /* Full-screen gradient from deep teal to warm cream, teal covering the top third */
+        background: linear-gradient(180deg, var(--color-teal) 0%, var(--color-teal) 8%, var(--color-cream-bg) 46%, var(--color-cream-bg) 100%);
+        background-image:
+            url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 13 50 13c10.353 0 16.36 2.347 25.96 5.937l1.768.661c.368.138.73.272 1.088.402H100V0H0v20h21.184z' fill='%23FFFFFF' fill-opacity='0.06' fill-rule='evenodd'/%3E%3C/svg%3E");
+        background-repeat: repeat-x;
+        background-position: top;
+        background-size: 100% 60px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 3. LAYOUT & SPACING */
+    .splash-content {
+        max-width: 440px; /* Mimic the narrower, centered app-like view */
+        width: 100%;
+        margin: 0 auto;
+        padding: 3.5rem 1.5rem 2rem;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* 4. LOGO AND NAME */
+    .hadithi-logo {
+        width: 108px;
+        height: 108px;
+        background-color: white;
+        border-radius: 26px;
+        padding: 1rem;
+        box-shadow: 0 10px 24px rgba(31, 41, 55, 0.12);
+        margin-bottom: 1.5rem;
+        animation: logoFadeScale 0.7s ease-out forwards;
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    .hadithi-name {
+        font-size: 2.75rem;
+        letter-spacing: -0.01em;
+        color: var(--color-text-dark);
+        margin-bottom: 0.35rem;
+        animation: fadeIn 0.7s ease-out 0.35s forwards;
+        opacity: 0;
+    }
+
+    .hadithi-tagline {
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 1.15rem;
+        color: var(--color-text-gray);
+        margin-bottom: 2.5rem;
+        animation: taglineSlideUp 0.7s ease-out 0.6s forwards;
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    /* 5. HERO ILLUSTRATION */
+    .hero-illustration {
+        width: 100%;
+        max-width: 420px;
+        margin-bottom: auto;
+        padding-bottom: 2.5rem;
+        animation: illustrationBreathing 3.5s ease-in-out infinite alternate, fadeIn 0.8s ease-out 0.85s forwards;
+        opacity: 0;
+    }
+
+    /* 6. CONNECTING / LOADING INDICATOR */
+    .loading-container {
+        color: var(--color-text-gray);
+        font-size: 1.05rem;
+        font-weight: 500;
+        margin-bottom: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.85rem;
+        animation: fadeIn 0.7s ease-out 1.2s forwards;
+        opacity: 0;
+    }
+
+    /* Step / progress dots: three groups of three dots, separated by arrows,
+       representing stories connecting across the community. */
+    .dot-steps {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .dot-group {
+        display: flex;
+        gap: 0.3rem;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--dot-empty);
+        transition: background-color 0.3s ease;
+    }
+
+    .dot.filled {
+        background-color: var(--color-teal);
+    }
+
+    .dot-arrow {
+        color: var(--dot-empty);
+        font-size: 0.9rem;
+        line-height: 1;
+    }
+
+    /* Animate each group's fill in sequence, looping, so the steps
+       visibly "connect" one after another. */
+    .dot-group[data-step="1"] .dot:nth-child(1) { animation: dotPulse 3.6s ease-in-out infinite; }
+    .dot-group[data-step="2"] .dot:nth-child(1),
+    .dot-group[data-step="2"] .dot:nth-child(2) { animation: dotPulse 3.6s ease-in-out infinite; animation-delay: 0.3s; }
+    .dot-group[data-step="3"] .dot { animation: dotPulse 3.6s ease-in-out infinite; animation-delay: 0.6s; }
+
+    /* 7. FOOTER */
+    .splash-footer {
+        font-size: 0.85rem;
+        color: var(--color-text-gray);
+        letter-spacing: 0.02em;
+        padding-top: 1rem;
+    }
+
+    /* ACTIONS CONTAINER (for non-authenticated users) */
+    .splash-actions {
+        margin-bottom: 2.5rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        animation: fadeIn 0.7s ease-out 1.2s forwards;
+        opacity: 0;
+    }
+
+    .btn-hadithi-primary {
+        background-color: var(--color-teal);
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+    .btn-hadithi-primary:hover {
+        background-color: var(--color-teal-dark);
+    }
+
+    .btn-hadithi-secondary {
+        border: 2px solid var(--color-teal);
+        color: var(--color-teal);
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s, color 0.2s;
+    }
+    .btn-hadithi-secondary:hover {
+        background-color: #f0f7f7;
+    }
+
+    /* 8. ANIMATION KEYFRAMES */
+    @keyframes logoFadeScale {
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+
+    @keyframes taglineSlideUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes illustrationBreathing {
+        from { transform: translateY(0) scale(1); }
+        to { transform: translateY(-5px) scale(1.02); }
+    }
+
+    @keyframes dotPulse {
+        0%, 55%, 100% { background-color: var(--color-teal); }
+        70% { background-color: var(--dot-empty); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hadithi-logo, .hadithi-name, .hadithi-tagline, .hero-illustration,
+        .loading-container, .splash-actions, .dot { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.object-contain { object-fit: contain; display: block; }
+.mt-6 { margin-top: 1.5rem; }
+img { max-width: 100%; }
+
+</style>
+</head>
+<body>
+
+<div class="hadithi-splash-container">
+    <div class="splash-content">
+
+        <!-- 1. Logo (Center) -->
+        <div class="hadithi-logo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPCEtLSBDYW5vcHk6IGNsdXN0ZXJlZCBsZWFmIGJsb2JzIC0tPgogIDxnPgogICAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iNTUiIHI9IjI2IiBmaWxsPSIjMkU4QjhCIi8+CiAgICA8Y2lyY2xlIGN4PSI3MiIgY3k9IjcwIiByPSIyMCIgZmlsbD0iIzJFOEI4QiIvPgogICAgPGNpcmNsZSBjeD0iMTI4IiBjeT0iNzAiIHI9IjIwIiBmaWxsPSIjMkU4QjhCIi8+CiAgICA8Y2lyY2xlIGN4PSI4NiIgY3k9IjkwIiByPSIxOCIgZmlsbD0iIzNBQTBBMCIvPgogICAgPGNpcmNsZSBjeD0iMTE0IiBjeT0iOTAiIHI9IjE4IiBmaWxsPSIjM0FBMEEwIi8+CiAgPC9nPgoKICA8IS0tIFNwZWVjaC1idWJibGUgbGVhZiAoYmx1ZSkgLS0+CiAgPGc+CiAgICA8cGF0aCBkPSJNMTM4IDQ2IGgyNiBhOCA4IDAgMCAxIDggOCB2MTQgYTggOCAwIDAgMSAtOCA4IGgtMTAgbC04IDkgdi05IGgtOCBhOCA4IDAgMCAxIC04IC04IHYtMTQgYTggOCAwIDAgMSA4IC04IHoiIGZpbGw9IiMzQjgyRjYiLz4KICA8L2c+CgogIDwhLS0gU3BlZWNoLWJ1YmJsZSBsZWFmIChvcmFuZ2UpIC0tPgogIDxnPgogICAgPHBhdGggZD0iTTMwIDYyIGgyNCBhNyA3IDAgMCAxIDcgNyB2MTIgYTcgNyAwIDAgMSAtNyA3IGgtOSBsLTcgOCB2LTggaC04IGE3IDcgMCAwIDEgLTcgLTcgdi0xMiBhNyA3IDAgMCAxIDcgLTcgeiIgZmlsbD0iI0Y0QTI2MSIvPgogIDwvZz4KCiAgPCEtLSBTbWFsbCBoZWFydCBhY2NlbnQgLS0+CiAgPHBhdGggZD0iTTEwMCAzMCBjLTMgLTYgLTEyIC02IC0xMyAxIGMtMSA2IDYgMTEgMTMgMTYgYzcgLTUgMTQgLTEwIDEzIC0xNiBjLTEgLTcgLTEwIC03IC0xMyAtMSB6IiBmaWxsPSIjRUY3QzdDIi8+CgogIDwhLS0gVHJ1bmsgLS0+CiAgPHJlY3QgeD0iOTMiIHk9Ijk1IiB3aWR0aD0iMTQiIGhlaWdodD0iMzQiIHJ4PSI0IiBmaWxsPSIjOEI1RTNDIi8+CgogIDwhLS0gT3BlbiBib29rIGJhc2UgLS0+CiAgPGc+CiAgICA8cGF0aCBkPSJNNDAgMTQ4IEM2MCAxMzggODIgMTM4IDEwMCAxNDYgVjE3MiBDODIgMTY0IDYwIDE2NCA0MCAxNzQgWiIgZmlsbD0iI0Y0QTI2MSIvPgogICAgPHBhdGggZD0iTTE2MCAxNDggQzE0MCAxMzggMTE4IDEzOCAxMDAgMTQ2IFYxNzIgQzExOCAxNjQgMTQwIDE2NCAxNjAgMTc0IFoiIGZpbGw9IiMzQjgyRjYiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTQ2IFYxNzIiIHN0cm9rZT0iIzFGMjkzNyIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuMTUiLz4KICAgIDxwYXRoIGQ9Ik00NiAxNTIgQzYyIDE0NiA4MCAxNDYgOTYgMTUyIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjUiLz4KICAgIDxwYXRoIGQ9Ik0xNTQgMTUyIEMxMzggMTQ2IDEyMCAxNDYgMTA0IDE1MiIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC41Ii8+CiAgPC9nPgo8L3N2Zz4K" alt="Hadithi Tree and Book Logo" class="w-full h-full object-contain">
+        </div>
+
+        <!-- 2. App Name & Tagline -->
+        <h1 class="hadithi-name">Hadithi</h1>
+        <p class="hadithi-tagline">Every Story Matters.</p>
+
+        <!-- 3. Hero Illustration -->
+        <div class="hero-illustration">
+            <img src="static/images/chat.svg" alt="Diverse community members sitting together in conversation under a tree with speech bubbles" class="w-full object-contain">
+        </div>
+
+        <!-- 4. Dynamic Loading / Action Section -->
+        
+            <div class="splash-actions">
+                <a href="#" class="btn-hadithi-primary">Get Started</a>
+                <a href="#" class="btn-hadithi-secondary">Login</a>
+            </div>
+        
+</body>
+</html>

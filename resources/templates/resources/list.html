@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Learning & Wellness Hub | HADITHI{% endblock %}
+{% block content %}
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+    <h1 class="text-xl sm:text-2xl font-bold text-hadithi-800">Learning &amp; Wellness Hub</h1>
+    {% if user.is_authenticated %}
+    <a href="{% url 'resources:submit' %}" class="bg-hadithi-600 text-white text-center px-4 py-2.5 sm:py-2 rounded-lg text-sm font-medium">
+        + Submit a resource
+    </a>
+    {% endif %}
+</div>
+
+<form method="get" class="flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-6">
+    <input type="text" name="q" value="{{ query }}" placeholder="Search resources..." class="w-full sm:flex-1 sm:min-w-[200px] border rounded-lg px-3 py-2.5 sm:py-2 text-sm">
+    <select name="category" class="w-full sm:w-auto border rounded-lg px-3 py-2.5 sm:py-2 text-sm">
+        <option value="">All categories</option>
+        {% for c in categories %}
+            <option value="{{ c.slug }}" {% if c.slug == selected_category %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+    </select>
+    <select name="type" class="w-full sm:w-auto border rounded-lg px-3 py-2.5 sm:py-2 text-sm">
+        <option value="">All types</option>
+        {% for value, label in resource_types %}
+            <option value="{{ value }}" {% if value == selected_type %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    <button class="w-full sm:w-auto bg-hadithi-600 text-white px-4 py-2.5 sm:py-2 rounded-lg text-sm font-medium">Filter</button>
+</form>
+
+<div class="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+    {% for r in resources %}
+    <a href="{{ r.get_absolute_url }}" class="block bg-white rounded-xl border shadow-sm p-5 hover:shadow-md transition">
+        <span class="text-xs uppercase tracking-wide text-hadithi-600 font-semibold">{{ r.get_resource_type_display }}</span>
+        <h3 class="font-semibold text-lg mt-1 mb-2">{{ r.title }}</h3>
+        <p class="text-sm text-gray-600">{{ r.summary|truncatewords:20 }}</p>
+    </a>
+    {% empty %}
+    <p class="text-gray-400 col-span-3">No resources found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

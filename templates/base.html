@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HADITHI Toolkit{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hadithi: {
+                            50: '#FAF7F0',    // cream page bg (content area)
+                            100: '#F0EAD9',
+                            200: '#E4DED0',
+                            900: '#0B2626',   // deep teal-black, primary dark
+                            800: '#123333',   // diagonal panel tone / footer
+                            700: '#1B4040',   // borders on dark
+                            pill: 'rgba(255,255,255,0.14)',    // translucent pill fill on dark
+                            pillHover: 'rgba(255,255,255,0.22)',
+                            500: '#2E8B8B',   // core teal accent
+                            600: '#267a7a',
+                        },
+                        warm: {
+                            orange: '#F4A261',
+                            blue: '#3B82F6',
+                            heart: '#EF7C7C',
+                        },
+                        ink: {
+                            DEFAULT: '#1F2937',
+                            gray: '#6B7280',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Baloo 2', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Diagonal split accent used behind the nav, echoing the reference login panel */
+        .hadithi-diagonal {
+            background-image: linear-gradient(135deg, #123333 0%, #123333 42%, #0B2626 43%, #0B2626 100%);
+        }
+    </style>
+</head>
+<body class="bg-hadithi-50 text-ink font-body min-h-screen flex flex-col">
+
+    {% if user.is_authenticated %}
+    <nav class="hadithi-diagonal text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <a href="{% url 'core:home' %}" class="flex items-center gap-2 shrink-0">
+                    <span class="font-heading font-extrabold text-xl lg:text-2xl tracking-tight">HADITHI</span>
+                </a>
+
+                <!-- Desktop links -->
+                <div class="hidden md:flex items-center gap-1 lg:gap-2 text-sm lg:text-[15px] font-medium">
+                    <a href="{% url 'resources:list' %}" class="px-4 py-2 rounded-full hover:bg-hadithi-pillHover transition-colors">Learning Hub</a>
+                    <a href="{% url 'community:story_list' %}" class="px-4 py-2 rounded-full hover:bg-hadithi-pillHover transition-colors">Stories</a>
+                    <a href="{% url 'community:assessment_list' %}" class="px-4 py-2 rounded-full hover:bg-hadithi-pillHover transition-colors">Self-Assess</a>
+                    <a href="{% url 'wellness:journal' %}" class="px-4 py-2 rounded-full hover:bg-hadithi-pillHover transition-colors">Wellness</a>
+                    <a href="{% url 'events:list' %}" class="px-4 py-2 rounded-full hover:bg-hadithi-pillHover transition-colors">Events</a>
+
+                    <span class="w-px h-6 bg-white/20 mx-2"></span>
+
+                    <a href="{% url 'core:dashboard' %}" class="px-4 py-2 rounded-full hover:bg-hadithi-pillHover transition-colors">Dashboard</a>
+                    <a href="{% url 'accounts:profile' %}" class="px-4 py-2 rounded-full hover:bg-hadithi-pillHover transition-colors">Profile</a>
+                    <a href="{% url 'accounts:logout' %}"
+                       class="ml-2 bg-white text-hadithi-900 px-6 py-2.5 rounded-full font-heading font-bold hover:bg-hadithi-100 transition-colors shadow-sm">
+                        Logout
+                    </a>
+                </div>
+
+                <!-- Mobile hamburger -->
+                <button id="hadithi-menu-btn" onclick="document.getElementById('hadithi-mobile-menu').classList.toggle('hidden'); document.getElementById('hadithi-icon-open').classList.toggle('hidden'); document.getElementById('hadithi-icon-close').classList.toggle('hidden');"
+                        class="md:hidden p-2 -mr-2 rounded-full hover:bg-hadithi-pillHover transition-colors" aria-label="Toggle menu">
+                    <svg id="hadithi-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <svg id="hadithi-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="hadithi-mobile-menu" class="hidden md:hidden bg-hadithi-900 border-t border-white/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-col text-sm font-medium">
+                <a href="{% url 'resources:list' %}" class="py-2.5 border-b border-white/10 hover:text-warm-orange">Learning Hub</a>
+                <a href="{% url 'community:story_list' %}" class="py-2.5 border-b border-white/10 hover:text-warm-orange">Stories</a>
+                <a href="{% url 'community:assessment_list' %}" class="py-2.5 border-b border-white/10 hover:text-warm-orange">Self-Assess</a>
+                <a href="{% url 'wellness:journal' %}" class="py-2.5 border-b border-white/10 hover:text-warm-orange">Wellness</a>
+                <a href="{% url 'events:list' %}" class="py-2.5 border-b border-white/10 hover:text-warm-orange">Events</a>
+                <a href="{% url 'core:dashboard' %}" class="py-2.5 border-b border-white/10 hover:text-warm-orange">Dashboard</a>
+                <a href="{% url 'accounts:profile' %}" class="py-2.5 border-b border-white/10 hover:text-warm-orange">Profile</a>
+                <a href="{% url 'accounts:logout' %}" class="mt-3 mb-1 text-center bg-white text-hadithi-900 px-4 py-2.5 rounded-full font-heading font-bold hover:bg-hadithi-100">Logout</a>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 {% if user.is_authenticated %}py-8 lg:py-10{% endif %}">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 rounded-2xl bg-white border border-hadithi-200 text-ink px-4 py-3 shadow-sm flex items-start gap-3">
+                    <span class="mt-0.5 w-2 h-2 rounded-full bg-warm-orange shrink-0"></span>
+                    <span class="text-sm">{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if user.is_authenticated %}
+    <footer class="bg-hadithi-900 text-hadithi-100 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 text-center lg:text-left">
+                <div class="max-w-sm mx-auto lg:mx-0">
+                    <span class="font-heading font-extrabold text-white text-lg">HADITHI</span>
+                    <p class="mt-2 text-sm text-hadithi-100/80 leading-relaxed">
+                        A digital toolkit supporting frontline healthcare workers with learning, peer
+                        storytelling, self-assessment, and wellness resources.
+                    </p>
+                </div>
+    {% endif %}
+                {% if user.is_authenticated %}
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-10 gap-y-2 text-sm justify-center lg:justify-end">
+                    <a href="{% url 'resources:list' %}" class="hover:text-white transition-colors">Learning Hub</a>
+                    <a href="{% url 'community:story_list' %}" class="hover:text-white transition-colors">Stories</a>
+                    <a href="{% url 'community:assessment_list' %}" class="hover:text-white transition-colors">Self-Assess</a>
+                    <a href="{% url 'wellness:journal' %}" class="hover:text-white transition-colors">Wellness</a>
+                    <a href="{% url 'events:list' %}" class="hover:text-white transition-colors">Events</a>
+                    <a href="{% url 'core:dashboard' %}" class="hover:text-white transition-colors">Dashboard</a>
+                </div>
+
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/10 text-xs text-hadithi-100/70 text-center lg:text-left">
+                &copy; {% now "Y" %} HADITHI Toolkit supporting frontline healthcare workers.
+            </div>
+               {% endif %}
+
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% block title %}Register | HADITHI{% endblock %}
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700;800&display=swap');
+
+    :root {
+        --login-bg-deep: #0B2620;
+        --login-bg-panel: #1E4640;
+        --login-pill-bg: rgba(255, 255, 255, 0.10);
+        --login-pill-border: rgba(255, 255, 255, 0.14);
+        --login-text-light: #EAF3F0;
+        --login-text-muted: rgba(234, 243, 240, 0.6);
+    }
+
+    .hadithi-login-container * { box-sizing: border-box; }
+
+    html, body { height: 100%; margin: 0 !important; padding: 0 !important; }
+    body > header, body > nav, body > .navbar { display: none !important; }
+
+    .hadithi-login-container {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: var(--login-bg-deep);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .hadithi-login-container::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: var(--login-bg-panel);
+        clip-path: polygon(100% 0, 100% 55%, 35% 100%, 0 100%, 0 38%);
+        opacity: 0.9;
+    }
+
+    .login-content {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 420px;
+        padding: 2.5rem 1.75rem calc(2.5rem + env(safe-area-inset-bottom));
+        margin: auto;
+    }
+
+    .login-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 800;
+        font-size: 1.7rem;
+        letter-spacing: 0.01em;
+        color: #FFFFFF;
+        text-align: center;
+        margin: 0 0 2rem;
+    }
+
+    .login-form { width: 100%; }
+
+    .login-field-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: var(--login-pill-bg);
+        border: 1px solid var(--login-pill-border);
+        border-radius: 9999px;
+        height: 56px;
+        margin-bottom: 0.6rem;
+        backdrop-filter: blur(2px);
+    }
+
+    .login-field-wrap.icon-left input { padding-left: 4.75rem; }
+    .login-field-wrap.icon-right input { padding-right: 4.75rem; }
+    .login-field-wrap.no-icon input { padding-left: 1.5rem; }
+
+    .login-field-wrap input {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--login-text-light);
+        font-size: 0.96rem;
+        font-family: 'Inter', sans-serif;
+        padding: 0 1.5rem;
+        border-radius: 9999px;
+    }
+    .login-field-wrap input::placeholder { color: var(--login-text-muted); }
+
+    .login-field-icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        flex-shrink: 0;
+    }
+    .login-field-icon svg { width: 20px; height: 20px; display: block; }
+    .icon-left .login-field-icon { left: -4px; }
+    .icon-right .login-field-icon { right: -4px; }
+
+    .login-field-group { margin-bottom: 0.65rem; }
+
+    .login-help {
+        color: var(--login-text-muted);
+        font-size: 0.74rem;
+        margin: 0.35rem 0 0 1.5rem;
+    }
+
+    .login-error {
+        color: #FCA5A5;
+        font-size: 0.78rem;
+        margin: 0.35rem 0 0 1.5rem;
+    }
+
+    .btn-login-submit {
+        width: 100%;
+        background-color: #FFFFFF;
+        color: var(--login-bg-deep);
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 9999px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.03em;
+        text-align: center;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-top: 0.75rem;
+    }
+    .btn-login-submit:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34); }
+    .btn-login-submit:active { transform: translateY(0); }
+
+    .login-footer-text {
+        text-align: center;
+        color: var(--login-text-muted);
+        font-size: 0.88rem;
+        margin-top: 1.5rem;
+    }
+    .login-footer-text a {
+        color: #FFFFFF;
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    @media (max-width: 400px) {
+        .login-title { font-size: 1.5rem; margin-bottom: 1.5rem; }
+        .login-field-wrap { height: 50px; }
+        .login-field-icon { width: 42px; height: 42px; }
+    }
+</style>
+
+<div class="hadithi-login-container">
+    <div class="login-content">
+        <h1 class="login-title">CREATE ACCOUNT</h1>
+
+        <form method="post" class="login-form" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="login-field-group">
+                {% if field.name == 'username' %}
+                <div class="login-field-wrap icon-left" data-label="{{ field.label }}">
+                    {{ field }}
+                    <span class="login-field-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#12332D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"></path>
+                        </svg>
+                    </span>
+                </div>
+                {% elif field.name == 'email' %}
+                <div class="login-field-wrap icon-left" data-label="{{ field.label }}">
+                    {{ field }}
+                    <span class="login-field-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#12332D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                            <path d="M3 7l9 6 9-6"></path>
+                        </svg>
+                    </span>
+                </div>
+                {% elif 'password' in field.name %}
+                <div class="login-field-wrap icon-right" data-label="{{ field.label }}">
+                    {{ field }}
+                    <span class="login-field-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#12332D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+                            <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                        </svg>
+                    </span>
+                </div>
+                {% else %}
+                <div class="login-field-wrap no-icon" data-label="{{ field.label }}">
+                    {{ field }}
+                </div>
+                {% endif %}
+
+                {% for error in field.errors %}
+                <p class="login-error">{{ error }}</p>
+                {% endfor %}
+                {% if field.help_text %}
+                <p class="login-help">{{ field.help_text }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-login-submit">REGISTER</button>
+        </form>
+
+        <p class="login-footer-text">
+            Already have an account? <a href="{% url 'accounts:login' %}">Login</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    // Fill in placeholder text from the field's label when the widget
+    // doesn't already define one, so inputs read like the mock (no
+    // separate <label> elements cluttering the pill).
+    document.querySelectorAll('.login-field-wrap input').forEach(function (input) {
+        if (!input.placeholder) {
+            var wrap = input.closest('.login-field-wrap');
+            if (wrap && wrap.dataset.label) {
+                input.placeholder = wrap.dataset.label;
+            }
+        }
+    });
+</script>
+{% endblock %}

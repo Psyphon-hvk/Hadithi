@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ story.title }} | HADITHI{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-xl border shadow-sm p-8">
+    <h1 class="text-2xl font-bold mb-1">{{ story.title }}</h1>
+    <p class="text-xs text-gray-500 mb-4">by {{ story.display_author }} &middot; {{ story.created_at|date:"M d, Y" }}</p>
+    <p class="text-gray-700 whitespace-pre-line mb-6">{{ story.body }}</p>
+
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'community:toggle_like' story.slug %}" class="inline">
+        {% csrf_token %}
+        <button class="text-sm text-hadithi-600 hover:underline">&hearts; {{ story.likes.count }} likes</button>
+    </form>
+    {% endif %}
+
+    <h2 class="font-semibold mt-8 mb-3">Peer support discussion</h2>
+    <div class="space-y-3 mb-6">
+        {% for c in story.comments.all %}
+        <div class="bg-gray-50 rounded-lg p-3 text-sm">
+            <span class="font-medium">{{ c.author }}</span>
+            <span class="text-gray-400 text-xs">{{ c.created_at|date:"M d, H:i" }}</span>
+            <p>{{ c.body }}</p>
+        </div>
+        {% empty %}
+        <p class="text-gray-400 text-sm">No comments yet. Be the first to respond.</p>
+        {% endfor %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <form method="post" class="flex gap-2">
+        {% csrf_token %}
+        <input type="text" name="body" placeholder="Write a supportive comment..." required class="flex-1 border rounded-lg px-3 py-2 text-sm">
+        <button class="bg-hadithi-600 text-white px-4 py-2 rounded-lg text-sm">Post</button>
+    </form>
+    {% else %}
+    <p class="text-sm text-gray-500"><a href="{% url 'accounts:login' %}" class="text-hadithi-600 hover:underline">Login</a> to join the discussion.</p>
+    {% endif %}
+</div>
+{% endblock %}

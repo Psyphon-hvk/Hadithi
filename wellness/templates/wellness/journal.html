@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Journal | HADITHI{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-hadithi-800 mb-6">My Journal</h1>
+<div class="grid md:grid-cols-2 gap-8">
+    <form method="post" class="bg-white rounded-xl border shadow-sm p-6 space-y-4 h-fit">
+        {% csrf_token %}
+        <div>
+            <label class="block text-sm font-medium mb-1">Title (optional)</label>
+            <input type="text" name="title" class="w-full border rounded-lg px-3 py-2">
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-1">Mood</label>
+            <input type="text" name="mood" placeholder="e.g. calm, stressed, hopeful" class="w-full border rounded-lg px-3 py-2">
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-1">Entry</label>
+            <textarea id="entry-body" name="body" rows="6" required class="w-full border rounded-lg px-3 py-2"></textarea>
+            <button type="button" id="reflect-btn" class="mt-2 text-sm text-hadithi-600 hover:underline">
+                Not sure how to handle this? Ask for support
+            </button>
+        </div>
+
+        <div id="reflect-result" class="hidden rounded-lg border p-4 text-sm space-y-2"></div>
+
+        <button class="bg-hadithi-600 text-white px-4 py-2 rounded-lg text-sm">Save entry</button>
+    </form>
+    <div class="space-y-3">
+        {% for e in entries %}
+        <div class="bg-white rounded-xl border shadow-sm p-4">
+            <p class="text-xs text-gray-400">{{ e.created_at|date:"M d, Y H:i" }} {% if e.mood %}&middot; {{ e.mood }}{% endif %}</p>
+            {% if e.title %}<h3 class="font-semibold">{{ e.title }}</h3>{% endif %}
+            <p class="text-sm text-gray-700">{{ e.body|truncatewords:30 }}</p>
+        </div>
+        {% empty %}
+        <p class="text-gray-400 text-sm">No entries yet. Write your first one.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.getElementById('reflect-btn').addEventListener('click', async () => {
+  const text = document.getElementById('entry-body').value.trim();
+  const box = document.getElementById('reflect-result');
+  if (!text) return;
+
+  box.classList.remove('hidden');
+  box.className = "rounded-lg border p-4 text-sm space-y-2 bg-gray-50";
+  box.innerHTML = "<p class='text-gray-400'>Thinking this through…</p>";
+
+  let data;
+  try {
+    const res = await fetch("{% url 'wellness:ai_reflect' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+      },
+      body: JSON.stringify({ text }),
+    });
+    data = await res.json();
+  } catch (err) {
+    box.className = "rounded-lg border p-4 text-sm space-y-2 bg-gray-50";
+    box.innerHTML = "<p class='text-gray-500'>Something went wrong. Please try again.</p>";
+    return;
+  }
+
+  if (data.error) {
+    box.className = "rounded-lg border p-4 text-sm space-y-2 bg-gray-50";
+    box.innerHTML = "<p class='text-gray-500'>Write a bit first, then try again.</p>";
+    return;
+  }
+
+  if (data.crisis) {
+    box.className = "rounded-lg border border-red-300 bg-red-50 p-4 text-sm space-y-2";
+    box.innerHTML = `
+      <p class="font-medium text-red-800">${data.reassurance}</p>
+      <p class="text-red-700">If you're in immediate danger, please reach out right now:</p>
+      <ul class="list-disc list-inside text-red-700">
+        <li>Emergency services: local emergency number</li>
+        <li>A crisis line or trusted person you can call now</li>
+      </ul>`;
+  } else {
+    box.className = "rounded-lg border p-4 text-sm space-y-2 bg-hadithi-50";
+    box.innerHTML = `
+      <p class="text-gray-700">${data.reassurance}</p>
+      ${data.options && data.options.length ? `<ul class="list-disc list-inside text-gray-600">
+        ${data.options.map(o => `<li>${o}</li>`).join("")}
+      </ul>` : ""}`;
+  }
+});
+</script>
+{% endblock %}
