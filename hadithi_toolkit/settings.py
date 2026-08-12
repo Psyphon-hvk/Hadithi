@@ -270,16 +270,4 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Hadithi",
     "welcome_sign": "Welcome to Hadithi Administration",
     "copyright": "Hadithi",
-
-    "show_sidebar": True,
-    "navigation_expanded": True,
-
-    "hide_models": [],
-    "hide_apps": [],
-
-    "icons": {
-        "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
-        "auth.Group": "fas fa-users",
-    },
 }
