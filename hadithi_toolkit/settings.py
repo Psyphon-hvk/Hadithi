@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-your-secret-key-here"
 
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
@@ -213,12 +213,8 @@ STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
-
     "staticfiles": {
-        "BACKEND": (
-            "whitenoise.storage."
-            "CompressedManifestStaticFilesStorage"
-        ),
+        "BACKEND": "hadithi_toolkit.storage.SilentFileManifestStaticFilesStorage",
     },
 }
 
@@ -271,3 +267,5 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to Hadithi Administration",
     "copyright": "Hadithi",
 }
+
+
