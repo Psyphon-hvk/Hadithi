@@ -40,6 +40,8 @@ CSRF_TRUSTED_ORIGINS = [
 # ============================================================
 
 INSTALLED_APPS = [
+    'jazzmin',
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -260,3 +262,27 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
 # OpenAI
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Hadithi Admin",
+    "site_header": "Hadithi Administration",
+    "site_brand": "Hadithi",
+    "welcome_sign": "Welcome to Hadithi Administration",
+    "copyright": "Hadithi",
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    "hide_models": [],
+    "hide_apps": [],
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+
+        "yourapp": "fas fa-folder",
+        "yourapp.yourmodel": "fas fa-book",
+    },
+}
