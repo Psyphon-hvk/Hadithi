@@ -281,8 +281,5 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
-
-        "yourapp": "fas fa-folder",
-        "yourapp.yourmodel": "fas fa-book",
     },
 }
