@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from core.views import debug_media
 from django.urls import include, path
 
 urlpatterns = [
@@ -12,7 +11,6 @@ urlpatterns = [
     path('community/', include('community.urls')),
     path('wellness/', include('wellness.urls')),
     path('events/', include('events.urls')),
-    path('debug-media/', debug_media),
 ]
 
 # Serve media files unconditionally (not just when DEBUG=True).
