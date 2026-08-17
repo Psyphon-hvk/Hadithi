@@ -110,6 +110,16 @@
     .icon-left .login-field-icon { left: -4px; }
     .icon-right .login-field-icon { right: -4px; }
 
+    .login-toggle-pw {
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    .login-toggle-pw:focus-visible {
+        outline: 2px solid #FFFFFF;
+        outline-offset: 2px;
+    }
+
     .login-error {
         color: #FCA5A5;
         font-size: 0.78rem;
@@ -181,12 +191,16 @@
                 {% elif field.name == 'password' %}
                 <div class="login-field-wrap icon-right" data-label="{{ field.label }}">
                     {{ field }}
-                    <span class="login-field-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#12332D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="5" y="11" width="14" height="9" rx="2"></rect>
-                            <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                    <button type="button" class="login-field-icon login-toggle-pw" aria-label="Show password" aria-pressed="false">
+                        <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="#12332D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
                         </svg>
-                    </span>
+                        <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="#12332D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a19.9 19.9 0 0 1 5.06-5.94M9.9 4.24A10.4 10.4 0 0 1 12 4c7 0 11 7 11 7a19.9 19.9 0 0 1-3.22 4.42M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
                 </div>
                 {% else %}
                 <div class="login-field-wrap no-icon" data-label="{{ field.label }}">
@@ -218,6 +232,23 @@
                 input.placeholder = wrap.dataset.label;
             }
         }
+    });
+
+    // Show/hide password toggle
+    document.querySelectorAll('.login-toggle-pw').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var wrap = btn.closest('.login-field-wrap');
+            var input = wrap.querySelector('input');
+            var eye = btn.querySelector('.icon-eye');
+            var eyeOff = btn.querySelector('.icon-eye-off');
+            var isHidden = input.type === 'password';
+
+            input.type = isHidden ? 'text' : 'password';
+            eye.style.display = isHidden ? 'none' : 'block';
+            eyeOff.style.display = isHidden ? 'block' : 'none';
+            btn.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+            btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+        });
     });
 </script>
 {% endblock %}

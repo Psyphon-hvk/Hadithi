@@ -13,5 +13,8 @@ urlpatterns = [
     path('events/', include('events.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve media files unconditionally (not just when DEBUG=True).
+# This is needed because Render's filesystem is ephemeral and this
+# app intentionally isn't using S3/R2 — files are only expected to
+# be downloadable until the next redeploy/restart.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

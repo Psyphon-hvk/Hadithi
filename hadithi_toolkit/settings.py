@@ -1,4 +1,3 @@
-
 import os
 from pathlib import Path
 
@@ -18,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-your-secret-key-here"
 
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
@@ -142,32 +141,9 @@ DATABASES = {
 # PASSWORD VALIDATION
 # ============================================================
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "MinimumLengthValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        ),
-    },
-]
+# No password strength requirements: users may set any password,
+# including short or common ones.
+AUTH_PASSWORD_VALIDATORS = []
 
 
 # ============================================================
@@ -267,5 +243,3 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to Hadithi Administration",
     "copyright": "Hadithi",
 }
-
-
