@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
+from .forms import ResourceSubmissionForm
 from .models import Bookmark, Resource, ResourceCategory
 
 
@@ -55,19 +57,21 @@ def my_bookmarks(request):
     return render(request, "resources/bookmarks.html", {"bookmarks": bookmarks})
 
 
-from django.contrib import messages
-from .forms import ResourceSubmissionForm
-
-
 @login_required
 def submit_resource(request):
     if request.method == "POST":
         form = ResourceSubmissionForm(request.POST, request.FILES)
         if form.is_valid():
-            resource = form.save()
+            resource = form.save(commit=False)
             resource.created_by = request.user
-            resource.save(update_fields=["created_by"])
-            messages.success(request, "Thanks! Your resource was submitted and is pending review.")
+            resource.is_published = request.user.is_staff
+            resource.save()
+
+            if request.user.is_staff:
+                messages.success(request, "Your resource was published.")
+            else:
+                messages.success(request, "Thanks! Your resource was submitted and is pending review.")
+
             return redirect("resources:list")
     else:
         form = ResourceSubmissionForm()
